@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Máy Tính Thống Kê Lớp 12 </title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .math-card { transition: all 0.2s ease; }
+        .math-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.2); }
+        .math-frac {
+            display: inline-flex;
+            flex-direction: column;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 4px;
+            font-size: 0.95em;
+        }
+        .math-num {
+            border-bottom: 2px solid currentColor;
+            padding-bottom: 2px;
+            white-space: nowrap;
+        }
+        .math-den {
+            padding-top: 2px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- LANDING PAGE -->
+    <div id="landing-page" class="fixed inset-0 z-50 bg-gradient-to-br from-indigo-950 via-slate-950 to-blue-950 flex items-center justify-center p-4 transition-all duration-500 overflow-y-auto">
+        <div class="max-w-3xl w-full bg-slate-900/90 backdrop-blur-2xl border border-indigo-500/30 p-6 sm:p-12 rounded-3xl shadow-2xl text-center flex flex-col items-center gap-6 my-auto">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/40">
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <div>
+                <span class="px-3.5 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-[10px] sm:text-xs font-extrabold uppercase tracking-widest border border-indigo-500/30">Chương trình Toán lớp 12 </span>
+                <h1 class="text-2xl sm:text-5xl font-extrabold text-white tracking-tight mt-3 mb-2 sm:mb-3">
+                   BẢNG THỐNG KÊ <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400"><br>THÔNG MINH</br> </span>
+                </h1>
+                <p class="text-slate-300 text-xs sm:text-base max-w-xl mx-auto leading-relaxed">
+                    Công cụ hỗ trợ tính toán mẫu số liệu ghép nhóm toàn diện: Số đặc trưng, tứ phân vị, giá trị ngoại lệ, hệ số biến thiên và so sánh đa bảng.
+                </p>
+            </div>
+            <button onclick="enterApp()" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-base rounded-2xl shadow-xl shadow-blue-600/40 transition-all transform hover:-translate-y-1 cursor-pointer flex items-center justify-center gap-2">
+                Bắt Đầu Sử Dụng Ngay
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center justify-between w-full sm:w-auto gap-3">
+                <div class="flex items-center gap-2">
+                    <button onclick="backToLanding()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium transition cursor-pointer flex items-center gap-1 border border-slate-700">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Trang chủ
+                    </button>
+                    <div class="h-4 w-px bg-slate-800"></div>
+                    <h1 class="text-sm sm:text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                        Bảng Thống Kê
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Tab Switcher & Làm tròn -->
+            <div class="flex items-center justify-between w-full sm:w-auto gap-2">
+                <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button type="button" id="tab-btn-single" onclick="switchView('single')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-blue-600 text-white shadow-sm">
+                        Máy Tính
+                    </button>
+                    <button type="button" id="tab-btn-multi" onclick="switchView('multi')" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white">
+                        So Sánh Bảng
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5 bg-slate-950 px-2.5 py-1.5 rounded-xl border border-slate-800 text-xs">
+                    <span class="text-slate-400 font-medium hidden sm:inline">Làm tròn:</span>
+                    <select id="rounding-select" onchange="calculateStats()" class="bg-slate-900 text-white font-bold rounded-lg px-2 py-1 outline-none border border-slate-700 cursor-pointer text-xs">
+                        <option value="0">Hàng đơn vị</option>
+                        <option value="1">1 chữ số</option>
+                        <option value="2">2 chữ số</option>
+                        <option value="3" selected>3 chữ số</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col gap-4 sm:gap-6">
+        
+        <!-- Dataset selector -->
+        <div class="flex flex-wrap items-center gap-2 bg-slate-900 p-3 rounded-2xl border border-slate-800 shadow-sm">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Bộ dữ liệu:</span>
+            <div id="dataset-tabs-container" class="flex flex-wrap items-center gap-2"></div>
+            <button type="button" onclick="addNewTableDataset()" class="px-3 py-1.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-bold rounded-xl border border-blue-500/30 transition cursor-pointer">
+                + Thêm bảng
+            </button>
+            <div class="sm:ml-auto flex items-center gap-2">
+                <button type="button" onclick="loadSample(1)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-blue-400 text-xs font-semibold rounded-xl border border-blue-500/30 transition cursor-pointer">
+                    Mẫu Ghép Nhóm
+                </button>
+                <button type="button" onclick="loadSample(2)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 text-xs font-semibold rounded-xl border border-emerald-500/30 transition cursor-pointer">
+                    Mẫu Khảo Sát
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 1 -->
+        <div id="view-single" class="flex flex-col gap-6">
+            <div class="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-6 bg-blue-500 rounded-full"></span>
+                        Bảng Nhập Dữ Liệu (<span id="active-table-label" class="text-blue-400">Bảng A</span>)
+                    </h2>
+                    <div class="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button type="button" id="mode-discrete-btn" onclick="setDatasetMode('discrete')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-blue-600 text-white shadow-sm">
+                            Tần số khảo sát
+                        </button>
+                        <button type="button" id="mode-grouped-btn" onclick="setDatasetMode('grouped')" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white">
+                            Ghép nhóm [aᵢ; aᵢ₊₁)
+    
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tự động tạo nhóm -->
+                <div id="auto-group-box" class="hidden bg-slate-950/60 border border-slate-800 rounded-xl p-3 mb-4 space-y-3">
+                    <p class="text-xs font-bold text-indigo-300">Tạo khoảng nhóm tự động:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 items-end">
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Đầu mút đầu (a₁)</label>
+                            <input type="number" step="any" id="auto-a1" value="150" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Độ dài nhóm (h)</label>
+                            <input type="number" step="any" id="auto-h" value="5" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Số lượng nhóm (k)</label>
+                            <input type="number" id="auto-k" value="5" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg">
+                        </div>
+                        <button type="button" onclick="applyAutoGroups()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">Áp dụng</button>
+                    </div>
+                </div>
+
+                <!-- Bảng nhập liệu -->
+                <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-3 mb-4">
+                    <div class="overflow-x-auto rounded-xl border border-slate-800">
+                        <table class="w-full text-xs sm:text-sm text-left">
+                            <thead id="table-head-row" class="bg-slate-800 text-slate-300 font-bold border-b border-slate-700"></thead>
+                            <tbody id="data-rows" class="divide-y divide-slate-800 bg-slate-900/60"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="addRow()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-blue-400 font-semibold text-xs rounded-xl transition cursor-pointer border border-blue-500/20">+ Thêm dòng </button>
+                        <button type="button" onclick="clearData()" class="px-3 py-2 text-slate-400 hover:text-rose-400 font-medium text-xs rounded-xl transition cursor-pointer">Xóa </button>
+                    </div>
+                    <button type="button" onclick="calculateStats()" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs rounded-xl shadow-lg cursor-pointer">Tính Toán Ngay ⚡</button>
+                </div>
+            </div>
+
+            <!-- Kết quả & Biểu đồ -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-7 bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-4 sm:p-6 flex flex-col gap-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-6 bg-emerald-500 rounded-full"></span>
+                        Bấm Vào Từng Ô Để Xem Lời Giải & Công Thức Chi Tiết
+                    </h2>
+
+                    <!-- Error Alert Box -->
+                    <div id="error-alert-box" class="hidden p-3 bg-rose-950/80 border border-rose-500/50 rounded-xl text-rose-200 text-xs font-semibold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span id="error-alert-text">Tần số (n) không thể là số âm!</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <button type="button" onclick="selectMetric('n')" class="metric-btn text-left bg-slate-800/80 hover:bg-slate-800 border border-slate-700 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-slate-300 font-bold block mb-1">Cỡ mẫu (n)</span>
+                            <div id="res-n" class="text-xl font-bold text-white">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('mean')" class="metric-btn text-left bg-blue-950/40 hover:bg-blue-900/50 border border-blue-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-blue-300 font-bold block mb-1">Số trung bình (x̄)</span>
+                            <div id="res-mean" class="text-xl font-bold text-blue-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('mode')" class="metric-btn text-left bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-indigo-300 font-bold block mb-1">Mốt (Mo)</span>
+                            <div id="res-mode" class="text-xl font-bold text-indigo-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('q1')" class="metric-btn text-left bg-sky-950/40 hover:bg-sky-900/50 border border-sky-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-sky-300 font-bold block mb-1">Q₁</span>
+                            <div id="res-q1" class="text-xl font-bold text-sky-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('q2')" class="metric-btn text-left bg-sky-950/40 hover:bg-sky-900/50 border border-sky-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-sky-300 font-bold block mb-1">Trung vị (Q₂)</span>
+                            <div id="res-q2" class="text-xl font-bold text-sky-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('q3')" class="metric-btn text-left bg-sky-950/40 hover:bg-sky-900/50 border border-sky-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-sky-300 font-bold block mb-1">Q₃</span>
+                            <div id="res-q3" class="text-xl font-bold text-sky-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('range')" class="metric-btn text-left bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-emerald-300 font-bold block mb-1">Biến thiên (R)</span>
+                            <div id="res-range" class="text-xl font-bold text-emerald-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('iqr')" class="metric-btn text-left bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-emerald-300 font-bold block mb-1">Tứ phân vị (ΔQ)</span>
+                            <div id="res-iqr" class="text-xl font-bold text-emerald-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('var')" class="metric-btn text-left bg-amber-950/40 hover:bg-amber-900/50 border border-amber-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-amber-300 font-bold block mb-1">Phương sai (s²)</span>
+                            <div id="res-var" class="text-xl font-bold text-amber-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('sd')" class="metric-btn text-left bg-amber-950/40 hover:bg-amber-900/50 border border-amber-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-amber-300 font-bold block mb-1">Độ lệch chuẩn (s)</span>
+                            <div id="res-sd" class="text-xl font-bold text-amber-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('dispersion')" class="metric-btn text-left bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-purple-300 font-bold block mb-1">Hệ số CV</span>
+                            <div id="res-dispersion" class="text-base font-bold text-purple-200">?</div>
+                        </button>
+                        <button type="button" onclick="selectMetric('outlier')" class="metric-btn text-left bg-rose-950/40 hover:bg-rose-900/50 border border-rose-500/30 p-3 rounded-xl cursor-pointer">
+                            <span class="text-xs text-rose-300 font-bold block mb-1">Ngoại lệ</span>
+                            <div id="res-outlier" class="text-base font-bold text-rose-200">?</div>
+                        </button>
+                    </div>
+
+                    <!-- Lời giải chi tiết -->
+                    <div id="focused-metric-box" class="hidden p-4 rounded-2xl bg-slate-950 border border-indigo-500/30 text-white relative">
+                        <div class="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
+                            <span id="metric-title-text" class="text-sm font-extrabold text-indigo-300"></span>
+                            <button onclick="document.getElementById('focused-metric-box').classList.add('hidden')" class="text-xs text-slate-400 hover:text-white">&times; Đóng</button>
+                        </div>
+                        <div id="focused-metric-content" class="text-xs sm:text-sm text-slate-200 space-y-2"></div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-4 sm:p-6 flex flex-col gap-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span class="w-2 h-6 bg-indigo-500 rounded-full"></span>
+                        Biểu Đồ Phân Bố Tần Số
+                    </h2>
+                    <div class="relative w-full h-80 bg-slate-950/60 rounded-xl border border-slate-800 p-3">
+                        <canvas id="statsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2 -->
+        <div id="view-multi" class="hidden flex flex-col gap-6">
+            <div class="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <h2 class="text-lg font-bold text-white">So Sánh Đa Bảng Dữ Liệu</h2>
+                    <button type="button" onclick="addNewTableDataset(); switchView('single');" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer flex items-center gap-1.5 self-start sm:self-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        + Thêm Bảng Mới
+                    </button>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-slate-800 mb-6">
+                    <table class="w-full text-xs sm:text-sm text-left">
+                        <thead class="bg-slate-800 text-slate-300 uppercase font-bold border-b border-slate-700">
+                            <tr>
+                                <th class="py-3 px-3">Bảng</th>
+                                <th class="py-3 px-2 text-center">n</th>
+                                <th class="py-3 px-2">x̄</th>
+                                <th class="py-3 px-2">Mo</th>
+                                <th class="py-3 px-2">Q₁, Q₃</th>
+                                <th class="py-3 px-2">R</th>
+                                <th class="py-3 px-2">s</th>
+                                <th class="py-3 px-2">CV (%)</th>
+                                <th class="py-3 px-2 text-center">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="multi-table-body" class="divide-y divide-slate-800 bg-slate-900/60 font-mono text-xs"></tbody>
+                    </table>
+                </div>
+                <div class="relative w-full h-80 bg-slate-950/60 rounded-xl border border-slate-800 p-3">
+                    <canvas id="multiStatsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script Logic -->
+    <script>
+        let datasets = {
+            'A': {
+                mode: 'discrete',
+                data: [
+                    { val: '', freq: '' },
+                    { val: '', freq: '' }
+                ]
+            }
+        };
+
+        let activeTab = 'A';
+        let currentStats = null;
+        let chartInstance = null;
+        let multiChartInstance = null;
+        let activeMetricKey = null;
+
+        function enterApp() {
+            const landing = document.getElementById('landing-page');
+            if (landing) {
+                landing.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => { landing.style.display = 'none'; }, 500);
+            }
+            initApp();
+        }
+
+        function backToLanding() {
+            const landing = document.getElementById('landing-page');
+            if (landing) {
+                landing.style.display = 'flex';
+                setTimeout(() => { landing.classList.remove('opacity-0', 'pointer-events-none'); }, 10);
+            }
+        }
+
+        function switchView(viewName) {
+            const btnSingle = document.getElementById('tab-btn-single');
+            const btnMulti = document.getElementById('tab-btn-multi');
+            const viewSingle = document.getElementById('view-single');
+            const viewMulti = document.getElementById('view-multi');
+
+            if (viewName === 'single') {
+                if (btnSingle) btnSingle.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-blue-600 text-white shadow-sm";
+                if (btnMulti) btnMulti.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white";
+                if (viewSingle) viewSingle.classList.remove('hidden');
+                if (viewMulti) viewMulti.classList.add('hidden');
+                renderTableInputs();
+                calculateStats();
+            } else {
+                if (btnMulti) btnMulti.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-purple-600 text-white shadow-sm";
+                if (btnSingle) btnSingle.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white";
+                if (viewMulti) viewMulti.classList.remove('hidden');
+                if (viewSingle) viewSingle.classList.add('hidden');
+                renderMultiTable();
+            }
+        }
+
+        function initApp() {
+            renderDatasetTabs();
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function renderDatasetTabs() {
+            const container = document.getElementById('dataset-tabs-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            Object.keys(datasets).forEach(key => {
+                let btn = document.createElement('button');
+                let isActive = key === activeTab;
+                btn.className = isActive 
+                    ? "px-3 py-1.5 bg-blue-600 text-white font-bold text-xs rounded-xl shadow-sm transition cursor-pointer"
+                    : "px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition cursor-pointer border border-slate-700";
+                btn.textContent = `Bảng ${key}`;
+                btn.onclick = () => {
+                    activeTab = key;
+                    renderDatasetTabs();
+                    renderTableInputs();
+                    calculateStats();
+                };
+                container.appendChild(btn);
+            });
+
+            const label = document.getElementById('active-table-label');
+            if (label) label.textContent = `Bảng ${activeTab}`;
+        }
+
+        function setDatasetMode(mode) {
+            if (!datasets[activeTab]) return;
+            datasets[activeTab].mode = mode;
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function renderTableInputs() {
+            const ds = datasets[activeTab];
+            if (!ds) return;
+            const head = document.getElementById('table-head-row');
+            const body = document.getElementById('data-rows');
+            const autoGroup = document.getElementById('auto-group-box');
+            const btnGroup = document.getElementById('mode-grouped-btn');
+            const btnDisc = document.getElementById('mode-discrete-btn');
+
+            if (ds.mode === 'grouped') {
+                if (btnGroup) btnGroup.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-blue-600 text-white shadow-sm";
+                if (btnDisc) btnDisc.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white";
+                if (autoGroup) autoGroup.classList.remove('hidden');
+
+                if (head) {
+                    head.innerHTML = `
+                        <th class="py-2.5 px-3">Đầu mút dưới (aᵢ)</th>
+                        <th class="py-2.5 px-3">Đầu mút trên (bᵢ)</th>
+                        <th class="py-2.5 px-3">Tần số (nᵢ)</th>
+                        <th class="py-2.5 px-2 text-center">Chèn / Xóa</th>
+                    `;
+                }
+
+                if (body) {
+                    body.innerHTML = '';
+                    ds.data.forEach((row, idx) => {
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="p-2"><input type="number" step="any" value="${row.low !== undefined && row.low !== '' ? row.low : ''}" placeholder="Nhập aᵢ" onchange="updateGroupRow(${idx}, 'low', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg"></td>
+                            <td class="p-2"><input type="number" step="any" value="${row.high !== undefined && row.high !== '' ? row.high : ''}" placeholder="Nhập bᵢ" onchange="updateGroupRow(${idx}, 'high', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg"></td>
+                            <td class="p-2"><input type="number" step="any" value="${row.freq !== undefined && row.freq !== '' ? row.freq : ''}" placeholder="Nhập nᵢ" onchange="updateGroupRow(${idx}, 'freq', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg"></td>
+                            <td class="p-2 text-center flex items-center justify-center gap-1">
+                                <button type="button" onclick="insertRowAt(${idx})" title="Chèn dòng bên dưới" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-xs font-bold transition cursor-pointer">+</button>
+                                <button type="button" onclick="deleteRow(${idx})" title="Xóa dòng" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded text-xs font-bold transition cursor-pointer">&times;</button>
+                            </td>
+                        `;
+                        body.appendChild(tr);
+                    });
+                }
+            } else {
+                if (btnDisc) btnDisc.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer bg-blue-600 text-white shadow-sm";
+                if (btnGroup) btnGroup.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition cursor-pointer text-slate-400 hover:text-white";
+                if (autoGroup) autoGroup.classList.add('hidden');
+
+                if (head) {
+                    head.innerHTML = `
+                        <th class="py-2.5 px-3">Giá trị (xᵢ)</th>
+                        <th class="py-2.5 px-3">Tần số (nᵢ)</th>
+                        <th class="py-2.5 px-2 text-center">Chèn / Xóa</th>
+                    `;
+                }
+
+                if (body) {
+                    body.innerHTML = '';
+                    ds.data.forEach((row, idx) => {
+                        let tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="p-2"><input type="number" step="any" value="${row.val !== undefined && row.val !== '' ? row.val : ''}" placeholder="Nhập xᵢ" onchange="updateDiscreteRow(${idx}, 'val', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg"></td>
+                            <td class="p-2"><input type="number" step="any" value="${row.freq !== undefined && row.freq !== '' ? row.freq : ''}" placeholder="Nhập nᵢ" onchange="updateDiscreteRow(${idx}, 'freq', this.value)" class="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700 text-white rounded-lg"></td>
+                            <td class="p-2 text-center flex items-center justify-center gap-1">
+                                <button type="button" onclick="insertRowAt(${idx})" title="Chèn dòng bên dưới" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-xs font-bold transition cursor-pointer">+</button>
+                                <button type="button" onclick="deleteRow(${idx})" title="Xóa dòng" class="px-1.5 py-1 bg-slate-800 hover:bg-slate-700 text-rose-400 rounded text-xs font-bold transition cursor-pointer">&times;</button>
+                            </td>
+                        `;
+                        body.appendChild(tr);
+                    });
+                }
+            }
+        }
+
+        function updateGroupRow(idx, field, val) {
+            if (datasets[activeTab] && datasets[activeTab].data[idx]) {
+                datasets[activeTab].data[idx][field] = val === '' ? '' : parseFloat(val);
+                calculateStats();
+            }
+        }
+
+        function updateDiscreteRow(idx, field, val) {
+            if (datasets[activeTab] && datasets[activeTab].data[idx]) {
+                datasets[activeTab].data[idx][field] = val === '' ? '' : parseFloat(val);
+                calculateStats();
+            }
+        }
+
+        function addRow() {
+            let ds = datasets[activeTab];
+            if (!ds) return;
+            if (ds.mode === 'grouped') {
+                ds.data.push({ low: '', high: '', freq: '' });
+            } else {
+                ds.data.push({ val: '', freq: '' });
+            }
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function insertRowAt(idx) {
+            let ds = datasets[activeTab];
+            if (!ds) return;
+            if (ds.mode === 'grouped') {
+                ds.data.splice(idx + 1, 0, { low: '', high: '', freq: '' });
+            } else {
+                ds.data.splice(idx + 1, 0, { val: '', freq: '' });
+            }
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function deleteRow(idx) {
+            let ds = datasets[activeTab];
+            if (!ds || ds.data.length <= 1) return;
+            ds.data.splice(idx, 1);
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function clearData() {
+            let ds = datasets[activeTab];
+            if (!ds) return;
+            if (ds.mode === 'grouped') {
+                ds.data = [{ low: '', high: '', freq: '' }];
+            } else {
+                ds.data = [{ val: '', freq: '' }];
+            }
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function applyAutoGroups() {
+            let a1 = parseFloat(document.getElementById('auto-a1').value) || 150;
+            let h = parseFloat(document.getElementById('auto-h').value) || 5;
+            let k = parseInt(document.getElementById('auto-k').value) || 5;
+
+            let newData = [];
+            let current = a1;
+            for (let i = 0; i < k; i++) {
+                newData.push({ low: current, high: current + h, freq: '' });
+                current += h;
+            }
+            datasets[activeTab].mode = 'grouped';
+            datasets[activeTab].data = newData;
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function addNewTableDataset() {
+            let keys = Object.keys(datasets);
+            let nextKey = String.fromCharCode(keys[keys.length - 1].charCodeAt(0) + 1);
+            datasets[nextKey] = {
+                mode: 'discrete',
+                data: [
+                    { val: '', freq: '' },
+                    { val: '', freq: '' }
+                ]
+            };
+            activeTab = nextKey;
+            renderDatasetTabs();
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function removeDataset(key, event) {
+            if (event) event.stopPropagation();
+            if (Object.keys(datasets).length <= 1) return;
+            delete datasets[key];
+            if (activeTab === key) {
+                activeTab = Object.keys(datasets)[0];
+            }
+            renderDatasetTabs();
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function loadSample(type) {
+            if (type === 1) {
+                datasets[activeTab] = {
+                    mode: 'grouped',
+                    data: [
+                        { low: 150, high: 155, freq: 4 },
+                        { low: 155, high: 160, freq: 10 },
+                        { low: 160, high: 165, freq: 16 },
+                        { low: 165, high: 170, freq: 8 },
+                        { low: 170, high: 175, freq: 2 }
+                    ]
+                };
+            } else {
+                datasets[activeTab] = {
+                    mode: 'discrete',
+                    data: [
+                        { val: 6, freq: 5 },
+                        { val: 7, freq: 12 },
+                        { val: 8, freq: 18 },
+                        { val: 9, freq: 10 },
+                        { val: 10, freq: 5 }
+                    ]
+                };
+            }
+            renderTableInputs();
+            calculateStats();
+        }
+
+        function computeDatasetStats(ds) {
+            if (!ds || !ds.data || ds.data.length === 0) return null;
+            let roundingSelect = document.getElementById('rounding-select');
+            let r = roundingSelect ? parseInt(roundingSelect.value) : 3;
+
+            let rows = [];
+            let n = 0;
+            let cf = 0;
+            let hasNegativeFreq = false;
+
+            if (ds.mode === 'grouped') {
+                ds.data.forEach(item => {
+                    let freq = parseFloat(item.freq);
+                    if (!isNaN(freq) && freq < 0) hasNegativeFreq = true;
+                    freq = freq || 0;
+                    
+                    let low = parseFloat(item.low);
+                    let high = parseFloat(item.high);
+                    if (isNaN(low) || isNaN(high)) return;
+                    cf += freq;
+                    n += freq;
+                    let mid = (low + high) / 2;
+                    rows.push({ low: low, high: high, freq: freq, mid: mid, cumulative: cf });
+                });
+            } else {
+                let validItems = ds.data.filter(item => item.val !== '' && !isNaN(item.val));
+                validItems.sort((a, b) => parseFloat(a.val) - parseFloat(b.val));
+                validItems.forEach(item => {
+                    let freq = parseFloat(item.freq);
+                    if (!isNaN(freq) && freq < 0) hasNegativeFreq = true;
+                    freq = freq || 0;
+
+                    let val = parseFloat(item.val);
+                    cf += freq;
+                    n += freq;
+                    rows.push({ val: val, freq: freq, cumulative: cf });
+                });
+            }
+
+            if (hasNegativeFreq) {
+                return { hasError: true, errorMsg: "Lỗi: Tần số (nᵢ) không thể là số âm!" };
+            }
+
+            if (n <= 0 || rows.length === 0) return null;
+
+            let sumXiNi = 0;
+            rows.forEach(row => {
+                let val = ds.mode === 'grouped' ? row.mid : row.val;
+                sumXiNi += val * row.freq;
+            });
+            let mean = sumXiNi / n;
+
+            let varianceSum = 0;
+            rows.forEach(row => {
+                let val = ds.mode === 'grouped' ? row.mid : row.val;
+                varianceSum += row.freq * Math.pow(val - mean, 2);
+            });
+            let variance = varianceSum / n;
+            let stdDev = Math.sqrt(variance);
+            let cv = mean !== 0 ? (stdDev / Math.abs(mean)) * 100 : 0;
+
+            let mode = getModeValue(rows, n, ds.mode);
+            let q1 = getPercentileValue(rows, n, 0.25, ds.mode);
+            let q2 = getPercentileValue(rows, n, 0.50, ds.mode);
+            let q3 = getPercentileValue(rows, n, 0.75, ds.mode);
+            let iqr = q3 - q1;
+
+            let xMin = ds.mode === 'grouped' ? rows[0].low : rows[0].val;
+            let xMax = ds.mode === 'grouped' ? rows[rows.length - 1].high : rows[rows.length - 1].val;
+            let range = xMax - xMin;
+
+            let outlierLower = q1 - 1.5 * iqr;
+            let outlierUpper = q3 + 1.5 * iqr;
+            let hasOutlier = false;
+
+            rows.forEach(row => {
+                if (ds.mode === 'grouped') {
+                    if (row.high < outlierLower || row.low > outlierUpper) {
+                        if (row.freq > 0) hasOutlier = true;
+                    }
+                } else {
+                    if (row.val < outlierLower || row.val > outlierUpper) {
+                        if (row.freq > 0) hasOutlier = true;
+                    }
+                }
+            });
+
+            return {
+                modeType: ds.mode,
+                rows: rows,
+                n: n,
+                mean: mean,
+                variance: variance,
+                stdDev: stdDev,
+                cv: cv,
+                mode: mode,
+                q1: q1,
+                q2: q2,
+                q3: q3,
+                iqr: iqr,
+                range: range,
+                outlierLower: outlierLower,
+                outlierUpper: outlierUpper,
+                hasOutlier: hasOutlier,
+                r: r
+            };
+        }
+
+        function calculateStats() {
+            const dataset = datasets[activeTab];
+            currentStats = computeDatasetStats(dataset);
+            
+            const errorBox = document.getElementById('error-alert-box');
+            const errorText = document.getElementById('error-alert-text');
+
+            if (!currentStats || currentStats.hasError) {
+                if (currentStats && currentStats.hasError) {
+                    if (errorBox) errorBox.classList.remove('hidden');
+                    if (errorText) errorText.textContent = currentStats.errorMsg;
+                } else {
+                    if (errorBox) errorBox.classList.add('hidden');
+                }
+
+                document.getElementById('res-n').textContent = '0';
+                document.getElementById('res-mean').textContent = '0';
+                document.getElementById('res-mode').textContent = '0';
+                document.getElementById('res-q1').textContent = '0';
+                document.getElementById('res-q2').textContent = '0';
+                document.getElementById('res-q3').textContent = '0';
+                document.getElementById('res-range').textContent = '0';
+                document.getElementById('res-iqr').textContent = '0';
+                document.getElementById('res-var').textContent = '0';
+                document.getElementById('res-sd').textContent = '0';
+                document.getElementById('res-dispersion').textContent = '0%';
+                document.getElementById('res-outlier').textContent = 'Không';
+                return;
+            }
+
+            if (errorBox) errorBox.classList.add('hidden');
+
+            let r = currentStats.r;
+            document.getElementById('res-n').textContent = currentStats.n;
+            document.getElementById('res-mean').textContent = currentStats.mean.toFixed(r);
+            document.getElementById('res-mode').textContent = isNaN(currentStats.mode) ? 'Không có' : currentStats.mode.toFixed(r);
+            document.getElementById('res-q1').textContent = currentStats.q1.toFixed(r);
+            document.getElementById('res-q2').textContent = currentStats.q2.toFixed(r);
+            document.getElementById('res-q3').textContent = currentStats.q3.toFixed(r);
+            document.getElementById('res-range').textContent = currentStats.range.toFixed(r);
+            document.getElementById('res-iqr').textContent = currentStats.iqr.toFixed(r);
+            document.getElementById('res-var').textContent = currentStats.variance.toFixed(r);
+            document.getElementById('res-sd').textContent = currentStats.stdDev.toFixed(r);
+            document.getElementById('res-dispersion').textContent = currentStats.cv.toFixed(r) + '%';
+            document.getElementById('res-outlier').textContent = currentStats.hasOutlier ? 'Có bất thường' : 'Không có';
+
+            renderChart(currentStats);
+            if (activeMetricKey) {
+                selectMetric(activeMetricKey);
+            }
+        }
+
+        function selectMetric(key) {
+            activeMetricKey = key;
+            const box = document.getElementById('focused-metric-box');
+            const titleEl = document.getElementById('metric-title-text');
+            const contentEl = document.getElementById('focused-metric-content');
+            if (box) box.classList.remove('hidden');
+
+            if (!currentStats) return;
+            let st = currentStats;
+            let r = st.r;
+
+            if (key === 'n') {
+                titleEl.textContent = "Cỡ mẫu (n)";
+                contentEl.innerHTML = `<p><b>Ý nghĩa:</b> Tổng số đối tượng được khảo sát trong mẫu.</p><p class="text-indigo-300"><b>Kết quả:</b> n = ${st.n}</p>`;
+            } else if (key === 'mean') {
+                titleEl.textContent = "Số trung bình (x̄)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị đại diện cho mức độ tập trung của mẫu số liệu.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        x̄ = 
+                        <span class="math-frac">
+                            <span class="math-num">n₁x₁ + n₂x₂ + ... + nₖxₖ</span>
+                            <span class="math-den">n</span>
+                        </span>
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> x̄ = ${st.mean.toFixed(r)}</p>
+                `;
+            } else if (key === 'mode') {
+                titleEl.textContent = "Mốt (Mo)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị có tần số xuất hiện lớn nhất trong mẫu.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức (Ghép nhóm):</b> 
+                        Mo = uₘ + 
+                        <span class="math-frac">
+                            <span class="math-num">nₘ - nₘ₋₁</span>
+                            <span class="math-den">(nₘ - nₘ₋₁) + (nₘ - nₘ₊₁)</span>
+                        </span>
+                        · h
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> Mo = ${isNaN(st.mode) ? 'Không có' : st.mode.toFixed(r)}</p>
+                `;
+            } else if (key === 'q1') {
+                titleEl.textContent = "Tứ phân vị Q₁";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị chia mẫu thành hai phần: 25% số liệu nhỏ hơn và 75% lớn hơn Q₁.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        Q₁ = uₚ + 
+                        <span class="math-frac">
+                            <span class="math-num">
+                                <span class="math-frac">
+                                    <span class="math-num">n</span>
+                                    <span class="math-den">4</span>
+                                </span> - C
+                            </span>
+                            <span class="math-den">nₚ</span>
+                        </span>
+                        · h
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> Q₁ = ${st.q1.toFixed(r)}</p>
+                `;
+            } else if (key === 'q2') {
+                titleEl.textContent = "Trung vị (Q₂)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị ở chính giữa, chia đôi mẫu số liệu thành hai phần bằng nhau.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        Q₂ = uₚ + 
+                        <span class="math-frac">
+                            <span class="math-num">
+                                <span class="math-frac">
+                                    <span class="math-num">2n</span>
+                                    <span class="math-den">4</span>
+                                </span> - C
+                            </span>
+                            <span class="math-den">nₚ</span>
+                        </span>
+                        · h
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> Q₂ = ${st.q2.toFixed(r)}</p>
+                `;
+            } else if (key === 'q3') {
+                titleEl.textContent = "Tứ phân vị Q₃";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị chia mẫu thành hai phần: 75% số liệu nhỏ hơn và 25% lớn hơn Q₃.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        Q₃ = uₚ + 
+                        <span class="math-frac">
+                            <span class="math-num">
+                                <span class="math-frac">
+                                    <span class="math-num">3n</span>
+                                    <span class="math-den">4</span>
+                                </span> - C
+                            </span>
+                            <span class="math-den">nₚ</span>
+                        </span>
+                        · h
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> Q₃ = ${st.q3.toFixed(r)}</p>
+                `;
+            } else if (key === 'range') {
+                titleEl.textContent = "Khoảng biến thiên (R)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Hiệu số giữa giá trị lớn nhất và nhỏ nhất của mẫu, đo độ dao động.</p>
+                    <p class="mt-2"><b>Công thức:</b> R = X<sub>max</sub> - X<sub>min</sub></p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> R = ${st.range.toFixed(r)}</p>
+                `;
+            } else if (key === 'iqr') {
+                titleEl.textContent = "Khoảng tứ phân vị (ΔQ)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Hiệu giữa tứ phân vị thứ ba và thứ nhất, đo độ phân tán của 50% số liệu ở giữa.</p>
+                    <p class="mt-2"><b>Công thức:</b> ΔQ = Q₃ - Q₁</p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> ΔQ = ${st.iqr.toFixed(r)}</p>
+                `;
+            } else if (key === 'var') {
+                titleEl.textContent = "Phương sai (s²)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Thống kê đo mức độ phân tán của dữ liệu quanh số trung bình.</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        s² = 
+                        <span class="math-frac">
+                            <span class="math-num">n₁(x₁ - x̄)² + ... + nₖ(xₖ - x̄)²</span>
+                            <span class="math-den">n</span>
+                        </span>
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> s² = ${st.variance.toFixed(r)}</p>
+                `;
+            } else if (key === 'sd') {
+                titleEl.textContent = "Độ lệch chuẩn (s)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Căn bậc hai của phương sai, cùng đơn vị với số liệu gốc.</p>
+                    <p class="mt-2"><b>Công thức:</b> s = √s²</p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> s = ${st.stdDev.toFixed(r)}</p>
+                `;
+            } else if (key === 'dispersion') {
+                titleEl.textContent = "Hệ số biến thiên (CV)";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Đánh giá mức độ đồng đều của mẫu số liệu (đơn vị phần trăm).</p>
+                    <p class="mt-2 flex items-center flex-wrap gap-1"><b>Công thức:</b> 
+                        CV = 
+                        <span class="math-frac">
+                            <span class="math-num">s</span>
+                            <span class="math-den">|x̄|</span>
+                        </span>
+                        · 100%
+                    </p>
+                    <p class="text-indigo-300 mt-2"><b>Kết quả:</b> CV = ${st.cv.toFixed(r)}%</p>
+                `;
+            } else if (key === 'outlier') {
+                titleEl.textContent = "Giá trị ngoại lệ";
+                contentEl.innerHTML = `
+                    <p><b>Ý nghĩa:</b> Giá trị bất thường nhỏ hơn Q₁ - 1.5·ΔQ hoặc lớn hơn Q₃ + 1.5·ΔQ.</p>
+                    <p class="text-rose-300 mt-2"><b>Kết quả:</b> ${st.hasOutlier ? 'Phát hiện giá trị bất thường trong mẫu!' : 'Không có giá trị bất thường nào.'}</p>
+                `;
+            }
+        }
+
+        function renderChart(st) {
+            const canvasEl = document.getElementById('statsChart');
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            let labels = [];
+            let dataVals = [];
+            let bgColors = [];
+
+            st.rows.forEach(row => {
+                if (st.modeType === 'grouped') {
+                    labels.push(`[${row.low}; ${row.high})`);
+                    let isOut = row.high < st.outlierLower || row.low > st.outlierUpper;
+                    bgColors.push(isOut ? 'rgba(244, 63, 94, 0.8)' : 'rgba(99, 102, 241, 0.7)');
+                } else {
+                    labels.push(`${row.val}`);
+                    let isOut = row.val < st.outlierLower || row.val > st.outlierUpper;
+                    bgColors.push(isOut ? 'rgba(244, 63, 94, 0.8)' : 'rgba(59, 130, 246, 0.7)');
+                }
+                dataVals.push(row.freq);
+            });
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tần số',
+                        data: dataVals,
+                        backgroundColor: bgColors,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function renderMultiTable() {
+            const tbody = document.getElementById('multi-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let multiLabels = [];
+            let multiMeans = [];
+            let multiStds = [];
+
+            Object.keys(datasets).forEach(key => {
+                let st = computeDatasetStats(datasets[key]);
+                let r = st ? st.r : 3;
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition";
+
+                if (st) {
+                    multiLabels.push(`Bảng ${key}`);
+                    multiMeans.push(st.mean);
+                    multiStds.push(st.stdDev);
+
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 font-bold text-blue-400">Bảng ${key}</td>
+                        <td class="py-2.5 px-2 text-center text-slate-300">${st.n}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${st.mean.toFixed(r)}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${isNaN(st.mode) ? '-' : st.mode.toFixed(r)}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${st.q1.toFixed(r)}, ${st.q3.toFixed(r)}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${st.range.toFixed(r)}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${st.stdDev.toFixed(r)}</td>
+                        <td class="py-2.5 px-2 text-slate-200">${st.cv.toFixed(r)}%</td>
+                        <td class="py-2.5 px-2 text-center"><button type="button" onclick="removeDataset('${key}', event)" class="text-slate-500 hover:text-rose-400 font-bold px-1.5">&times;</button></td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 font-bold text-blue-400">Bảng ${key}</td>
+                        <td colspan="7" class="py-2.5 px-2 text-slate-500 italic">Chưa đủ dữ liệu</td>
+                        <td class="py-2.5 px-2 text-center"><button type="button" onclick="removeDataset('${key}', event)" class="text-slate-500 hover:text-rose-400 font-bold px-1.5">&times;</button></td>
+                    `;
+                }
+                tbody.appendChild(tr);
+            });
+
+            renderMultiChart(multiLabels, multiMeans, multiStds);
+        }
+
+        function renderMultiChart(labels, means, stds) {
+            const canvasEl = document.getElementById('multiStatsChart');
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
+            if (multiChartInstance) multiChartInstance.destroy();
+
+            multiChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Số trung bình (x̄)', data: means, backgroundColor: 'rgba(59, 130, 246, 0.7)', borderRadius: 6 },
+                        { label: 'Độ lệch chuẩn (s)', data: stds, backgroundColor: 'rgba(168, 85, 247, 0.7)', borderRadius: 6 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#cbd5e1' } } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function getPercentileValue(rows, n, p, modeType) {
+            let target = p * n;
+            if (modeType === 'grouped') {
+                let prevCf = 0;
+                for (let i = 0; i < rows.length; i++) {
+                    let row = rows[i];
+                    if (row.cumulative >= target) {
+                        let low = row.low;
+                        let high = row.high;
+                        let h = high - low;
+                        let freq = row.freq;
+                        let c = prevCf;
+                        if (freq === 0) return low;
+                        return low + ((target - c) / freq) * h;
+                    }
+                    prevCf = row.cumulative;
+                }
+                return rows[rows.length - 1].high;
+            } else {
+                for (let i = 0; i < rows.length; i++) {
+                    if (rows[i].cumulative >= target) return rows[i].val;
+                }
+                return rows[rows.length - 1].val;
+            }
+        }
+
+        function getModeValue(rows, n, modeType) {
+            let maxFreq = -1;
+            rows.forEach(r => { if (r.freq > maxFreq) maxFreq = r.freq; });
+            if (maxFreq <= 0) return NaN;
+
+            let modalIndex = rows.findIndex(r => r.freq === maxFreq);
+            if (modalIndex === -1) return NaN;
+
+            if (modeType === 'grouped') {
+                let row = rows[modalIndex];
+                let low = row.low;
+                let high = row.high;
+                let h = high - low;
+                let nm = row.freq;
+                let nmPrev = modalIndex > 0 ? rows[modalIndex - 1].freq : 0;
+                let nmNext = modalIndex < rows.length - 1 ? rows[modalIndex + 1].freq : 0;
+
+                let denominator = (nm - nmPrev) + (nm - nmNext);
+                if (denominator === 0) return low + h / 2;
+                return low + ((nm - nmPrev) / denominator) * h;
+            } else {
+                return rows[modalIndex].val;
+            }
+        }
+
+        window.onload = function() {
+            initApp();
+        };
+    </script>
+</body>
+</html>
